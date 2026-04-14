@@ -14,7 +14,7 @@ services:
     depends_on:
       - db
     networks:
-      - pr${PR_NUMBER}-network
+      - internal
       - app-network
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')"]
@@ -30,16 +30,15 @@ services:
       MYSQL_ROOT_PASSWORD: ${BA_DB_PASSWORD}
       MYSQL_DATABASE: ${BA_DB_NAME}
     volumes:
-      - ba_db_pr${PR_NUMBER}:/var/lib/mysql
+      - db_data:/var/lib/mysql
     networks:
-      - pr${PR_NUMBER}-network
+      - internal
 
 volumes:
-  ba_db_pr${PR_NUMBER}:
+  db_data:
 
 networks:
-  pr${PR_NUMBER}-network:
-    name: ba-pr${PR_NUMBER}-network
+  internal:
   app-network:
     name: app-network
     external: true
