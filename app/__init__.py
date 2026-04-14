@@ -1,4 +1,5 @@
 from flask import Flask
+
 from .config import config_by_name
 from .extensions import db, migrate
 
