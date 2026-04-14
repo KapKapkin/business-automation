@@ -5,4 +5,4 @@ from . import api_bp
 
 @api_bp.get("/health")
 def health():
-    return jsonify({"status": "OK"})
+    return jsonify({"status": "ok"})
