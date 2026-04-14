@@ -74,7 +74,7 @@ business-automation/
 - **db** — MySQL 9.1, данные хранятся в volume `ba_db_data`.
 
 ### `docker-compose.preview.yml`
-Аналог `docker-compose.yml` для PR-стендов. Всегда собирает образ локально (`build: .`), порт — `9000 + PR_NUMBER`, все контейнеры и volume изолированы по номеру PR.
+Аналог `docker-compose.yml` для PR-стендов. Всегда собирает образ локально (`build: .`), подключается к `app-network` (чтобы nginx-proxy видел контейнер по имени). Все контейнеры и volume изолированы по номеру PR.
 
 ### `nginx/nginx.conf`
 Слушает порт 8080. Проксирует запросы с префиксом `/python/` на `flask:5000/`, передаёт заголовки `X-Real-IP`, `X-Forwarded-For`, `X-Forwarded-Proto`.
@@ -90,7 +90,7 @@ business-automation/
 4. **deploy** — по SSH: `git pull`, записывает `.env`, логинится в GHCR, `docker compose pull flask && docker compose up -d --no-build`
 
 ### `.github/workflows/preview-deploy.yml` — preview-стенды
-Запускается при открытии/обновлении Pull Request. По SSH клонирует ветку PR в `/home/oz-admin/ba-previews/prN`, генерирует `.env`, запускает `docker compose -f docker-compose.preview.yml up -d --build`. Добавляет комментарий к PR со ссылкой на стенд.
+Запускается при открытии/обновлении Pull Request. По SSH клонирует ветку PR в `/home/oz-admin/ba-previews/prN`, генерирует `.env`, запускает `docker compose -f docker-compose.preview.yml up -d --build`. Создаёт файл `/home/oz-admin/nginx-previews/prN.conf` с `location`-блоком и делает `nginx -s reload`. Автоматически добавляет (или обновляет при повторном пуше) комментарий к PR с таблицей: статус, ветка, коммит, автор, URL стенда.
 
 ### `.github/workflows/preview-cleanup.yml` — очистка стендов
 Запускается при закрытии PR. По SSH делает `docker compose down -v --remove-orphans` и удаляет папку стенда.
@@ -200,7 +200,7 @@ app.register_blueprint(items_bp, url_prefix="/api/items")
 
 1. Создайте ветку: `git checkout -b feature/my-feature`
 2. Внесите изменения, напишите тесты
-3. Откройте Pull Request — GitHub Actions автоматически поднимет preview-стенд на `http://SERVER_HOST:9000+PR_NUMBER`
+3. Откройте Pull Request — GitHub Actions автоматически поднимет preview-стенд и добавит комментарий с URL: `http://SERVER_HOST/python/preview/prN/`
 4. После approve от `@KapKapkin` и merge в `main` — автоматически запустится деплой в production
 
 ---
