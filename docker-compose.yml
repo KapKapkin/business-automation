@@ -1,0 +1,44 @@
+services:
+  flask:
+    image: ${FLASK_IMAGE:-ghcr.io/kapkapkin/business-automation:latest}
+    build: .
+    container_name: ba-flask
+    restart: always
+    env_file:
+      - .env
+    expose:
+      - "5000"
+    depends_on:
+      - db
+    networks:
+      - ba-network
+      - app-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db:
+    image: mysql:9.1
+    container_name: ba-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - ba_db_data:/var/lib/mysql
+    expose:
+      - "3306"
+    networks:
+      - ba-network
+
+volumes:
+  ba_db_data:
+
+networks:
+  ba-network:
+    name: ba-network
+  app-network:
+    name: app-network
+    external: true
