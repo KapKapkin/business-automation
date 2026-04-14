@@ -27,7 +27,12 @@ jobs:
                 -p "ba-pr${PR_NUMBER}" \
                 down -v --remove-orphans
               rm -rf "$DEPLOY_DIR"
-              echo "Preview pr${PR_NUMBER} уничтожен"
+              echo "Контейнеры pr${PR_NUMBER} уничтожены"
             else
               echo "Папка $DEPLOY_DIR не найдена, пропускаем"
             fi
+
+            # Удаляем nginx-маршрут и перезагружаем
+            rm -f /home/oz-admin/nginx-previews/pr${PR_NUMBER}.conf
+            docker exec nginx-proxy nginx -s reload
+            echo "nginx-маршрут для pr${PR_NUMBER} удалён"

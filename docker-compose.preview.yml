@@ -11,12 +11,11 @@ services:
       DB_NAME: ${BA_DB_NAME}
       DB_USER: ${BA_DB_USER}
       DB_PASSWORD: ${BA_DB_PASSWORD}
-    ports:
-      - "${PREVIEW_PORT}:5000"
     depends_on:
       - db
     networks:
       - pr${PR_NUMBER}-network
+      - app-network
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')"]
       interval: 10s
@@ -41,3 +40,6 @@ volumes:
 networks:
   pr${PR_NUMBER}-network:
     name: ba-pr${PR_NUMBER}-network
+  app-network:
+    name: app-network
+    external: true
