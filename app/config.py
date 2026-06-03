@@ -4,7 +4,6 @@ import os
 class BaseConfig:
     SECRET_KEY = os.environ.get("SECRET_KEY", "change-me-in-production")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER", "uploads/reports")
 
     DB_HOST = os.environ.get("DB_HOST", "db")
     DB_PORT = os.environ.get("DB_PORT", "3306")
@@ -27,14 +26,7 @@ class ProductionConfig(BaseConfig):
     DEBUG = False
 
 
-class TestingConfig(BaseConfig):
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
-    UPLOAD_FOLDER = "/tmp/business-automation-test-uploads"
-
-
 config_by_name = {
     "development": DevelopmentConfig(),
     "production": ProductionConfig(),
-    "testing": TestingConfig(),
 }
