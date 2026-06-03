@@ -4,41 +4,18 @@ def test_health(client):
     assert response.get_json() == {"status": "OK"}
 
 
-def test_main_screen_uses_copied_recommended_groups_design(client):
+def test_main_screen_uses_frontend_shell_with_app_logic(client):
     response = client.get("/")
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert "Формирование списка рекомендуемых групп" in html
-    assert 'class="panel"' in html
-    assert 'class="groups"' in html
-    assert 'id="subjectModal"' in html
+    assert "Проверка остаточных знаний" in html
+    assert 'class="navbar-container"' in html
+    assert 'class="main-container"' in html
+    assert 'id="teacher-reports"' in html
+    assert 'id="groups"' in html
+    assert 'id="experts"' in html
     assert "static/style.css" in html
-
-
-def test_recommended_groups_form_saves_plan_and_subjects(client, app):
-    response = client.post(
-        "/",
-        data={
-            "cur_221-112": "on",
-            "plan_221-112": "aut25",
-            "subjects_221-112_1": "math",
-            "subjects_221-112_2": "databases",
-        },
-    )
-
-    assert response.status_code == 302
-
-    with app.app_context():
-        from app.models import StudyGroup
-
-        group = StudyGroup.query.filter_by(group_number="221-112").one()
-        assert group.current_testing is True
-        assert group.planned_term == "Осень 2025"
-        assert sorted(selection.discipline.name for selection in group.selected_disciplines) == [
-            "Базы данных",
-            "Математика",
-        ]
 
 
 def test_bootstrap_exposes_python_task_data(client):
