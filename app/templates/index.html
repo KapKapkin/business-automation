@@ -1,398 +1,346 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Проверка остаточных знаний</title>
-  <link rel="stylesheet" href="static/main.css">
+  <meta charset="utf-8" />
+  <title>Формирование списка рекомендуемых групп</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-  <aside class="navbar">
-    <div class="logo">Московский Политех</div>
-    <div class="line"></div>
-    <h1>Проверка остаточных знаний</h1>
-    <div class="profile">
-      <div class="avatar">ИИ</div>
-      <div>
-        <strong>Иванов</strong>
-        <span>Иван Иванович</span>
+  <div class="stage">
+      <div class="viewport" style="width:1370px;height:890px;">
+          <div class="panel">
+
+              <h1 class="h1">Формирование списка рекомендуемых групп</h1>
+
+              <form method="post" class="form" enctype="application/x-www-form-urlencoded" id="mainForm">
+
+                  <div class="top-filters">
+                      <div class="filter-row">
+                          <div class="filter-item">
+                            <label for="faculty" class="filter-labfa">Факультет/институт:</label>
+                            <div class="select">
+                                <select name="faculty" id="faculty">
+                                    <option>ФИТ</option>
+                                </select>
+                                <span class="caret">▾</span>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <label for="direction" class="filter-labdi">Направление:</label>
+                            <div class="select">
+                                <select name="direction" id="direction">
+                                    <option>ИСИТ</option>
+                                </select>
+                                <span class="caret">▾</span>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <label for="year" class="filter-labye">Учебный год:</label>
+                            <div class="select">
+                                <select name="year" id="year">
+                                    <option>Весна</option>
+                                </select>
+                                <span class="caret">▾</span>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <label for="semester" class="filter-labse">Семестр:</label>
+                            <div class="select">
+                                <select name="semester" id="semester">
+                                    <option>2025</option>
+                                </select>
+                                <span class="caret">▾</span>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="table-area">
+                      <table class="groups">
+                          <thead>
+                              <tr>
+                                  <th>Группа</th>
+                                  <th>Курс</th>
+                                  <th>Предыдущие тестирования</th>
+                                  <th>Текущее тестирование</th>
+                                  <th>Запланировать тестирование</th>
+                              </tr>
+                              <tr class="sub-header">
+                                  <th></th>
+                                  <th></th>
+                                  <th>
+                                      <div class="periods">
+                                          <span>весна 2023</span>
+                                          <span>осень 2023</span>
+                                          <span>весна 2024</span>
+                                      </div>
+                                  </th>
+                                  <th>весна 2025</th>
+                                  <th>
+                                      <div class="periods">
+                                          <span>осень 2025</span>
+                                          <span>весна 2026</span>
+                                      </div>
+                                  </th>
+                              </tr>
+                          </thead>
+
+                          <tbody>
+                              {% for g in groups %}
+                              <tr class="{% if loop.index % 2 == 1 %}odd-row{% else %}even-row{% endif %}">
+                                  <td class="group-id">{{ g.id }}</td>
+                                  <td class="course">{{ g.course }}</td>
+
+                                  <!-- Предыдущие: три независимых чекбокса -->
+                                  <td class="prev-col">
+                                      <div class="controls-row">
+                                            <label class="square-toggle" title="весна 2023" for="prev_{{ g.id }}_v23">
+                                                <input type="checkbox" name="prev_{{ g.id }}_v23" id="prev_{{ g.id }}_v23" {% if g.prev[0] %}checked{% endif %}>
+                                                <span class="sq">
+                                                  <svg class="icon-check" viewBox="0 0 24 24"><path fill="#fff" d="M20.285 6.709l-11.285 11.29-5.285-5.29 1.414-1.414 3.871 3.876 9.871-9.882z"/></svg>
+                                                  <svg class="icon-cross" viewBox="0 0 24 24"><path fill="#fff" d="M18.3 5.71l-1-1L12 9l-5.3-4.29-1 1L11 10l-5.3 4.29 1 1L12 11l5.3 4.29 1-1L13 10z"/></svg>
+                                                </span>
+                                            </label>
+
+                                          <label class="square-toggle" title="осень 2023" for="prev_{{ g.id }}_o23">
+                                              <input type="checkbox" name="prev_{{ g.id }}_o23" id="prev_{{ g.id }}_o23" {% if g.prev[1] %}checked{% endif %}>
+                                              <span class="sq">
+                                                  <svg class="icon-check" viewBox="0 0 24 24"><path fill="#fff" d="M20.285 6.709l-11.285 11.29-5.285-5.29 1.414-1.414 3.871 3.876 9.871-9.882z"/></svg>
+                                                  <svg class="icon-cross" viewBox="0 0 24 24"><path fill="#fff" d="M18.3 5.71l-1-1L12 9l-5.3-4.29-1 1L11 10l-5.3 4.29 1 1L12 11l5.3 4.29 1-1L13 10z"/></svg>
+                                              </span>
+                                          </label>
+
+                                          <label class="square-toggle" title="весна 2024" for="prev_{{ g.id }}_v24">
+                                              <input type="checkbox" name="prev_{{ g.id }}_v24" id="prev_{{ g.id }}_v24" {% if g.prev[2] %}checked{% endif %}>
+                                              <span class="sq">
+                                                  <svg class="icon-check" viewBox="0 0 24 24"><path fill="#fff" d="M20.285 6.709l-11.285 11.29-5.285-5.29 1.414-1.414 3.871 3.876 9.871-9.882z"/></svg>
+                                                  <svg class="icon-cross" viewBox="0 0 24 24"><path fill="#fff" d="M18.3 5.71l-1-1L12 9l-5.3-4.29-1 1L11 10l-5.3 4.29 1 1L12 11l5.3 4.29 1-1L13 10z"/></svg>
+                                              </span>
+                                          </label>
+                                      </div>
+                                  </td>
+
+                                  <!-- Текущее: один чекбокс -->
+                                  <td class="current-col">
+                                      <div class="controls-row center">
+                                          <label class="square-toggle" title="текущее тестирование">
+                                              <input type="checkbox" name="cur_{{ g.id }}" {% if g.current %}checked{% endif %}>
+                                              <span class="sq">
+                                                  <svg class="icon-check" viewBox="0 0 24 24"><path fill="#fff" d="M20.285 6.709l-11.285 11.29-5.285-5.29 1.414-1.414 3.871 3.876 9.871-9.882z"/></svg>
+                                                  <svg class="icon-cross" viewBox="0 0 24 24"><path fill="#fff" d="M18.3 5.71l-1-1L12 9l-5.3-4.29-1 1L11 10l-5.3 4.29 1 1L12 11l5.3 4.29 1-1L13 10z"/></svg>
+                                              </span>
+                                          </label>
+                                      </div>
+                                  </td>
+
+                                  <!-- Запланировать: квадраты с синей галочкой (radio -> только один) -->
+                                  <td class="plan-col">
+                                      <div class="plan-controls">
+                                          <label class="plan-square" title="Осень 2025">
+                                              <input type="radio" name="plan_{{ g.id }}" value="aut25" {% if g.plan == 'aut25' %}checked{% endif %}>
+                                              <span class="sq-plan"><svg class="plan-check" viewBox="0 0 24 24"><path fill="#fff" d="M20.285 6.709l-11.285 11.29-5.285-5.29 1.414-1.414 3.871 3.876 9.871-9.882z"/></svg>
+                                              </span>
+                                          </label>
+
+                                          <label class="plan-square" title="Весна 2026">
+                                              <input type="radio" name="plan_{{ g.id }}" value="spr26" {% if g.plan == 'spr26' %}checked{% endif %}>
+                                              <span class="sq-plan">
+                                                  <svg class="plan-check" viewBox="0 0 24 24"><path fill="#fff" d="M20.285 6.709l-11.285 11.29-5.285-5.29 1.414-1.414 3.871 3.876 9.871-9.882z"/></svg>
+                                              </span>
+                                          </label>
+                                      </div>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                  </div>
+
+                  <div class="action">
+                      <input class="btn" type="submit" value="Сформировать">
+                  </div>
+              </form>
+
+          </div>
       </div>
+  </div>
+  <div class="modal-overlay" id="subjectModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Выбор дисциплин для группы <span class="modal-group-id" id="modalGroupId"></span></h3>
+            </div>
+            <div class="modal-content">
+                <div class="select-row">
+                    <div class="select-wrapper">
+                        <label>Дисциплина 1</label>
+                        <select class="modal-select" id="subject1">
+                            <option value="">Выберите дисциплину</option>
+                            <option value="math">Математика</option>
+                            <option value="physics">Физика</option>
+                            <option value="programming">Программирование</option>
+                            <option value="algorithms">Алгоритмы и структуры данных</option>
+                            <option value="databases">Базы данных</option>
+                            <option value="networks">Компьютерные сети</option>
+                            <option value="english">Английский язык</option>
+                            <option value="economics">Экономика</option>
+                        </select>
+                        <span class="modal-caret">▾</span>
+                    </div>
+                    <div class="select-wrapper">
+                        <label>Дисциплина 2</label>
+                        <select class="modal-select" id="subject2">
+                            <option value="">Выберите дисциплину</option>
+                            <option value="math">Математика</option>
+                            <option value="physics">Физика</option>
+                            <option value="programming">Программирование</option>
+                            <option value="algorithms">Алгоритмы и структуры данных</option>
+                            <option value="databases">Базы данных</option>
+                            <option value="networks">Компьютерные сети</option>
+                            <option value="english">Английский язык</option>
+                            <option value="economics">Экономика</option>
+                        </select>
+                        <span class="modal-caret">▾</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn btn-back" id="btnBack">Вернуться</button>
+                <button type="button" class="modal-btn btn-clear" id="btnClear">Очистить выбор</button>
+                <button type="button" class="modal-btn btn-confirm" id="btnConfirm">Подтвердить выбор</button>
+            </div>
+        </div>
     </div>
-    <nav id="tabs" class="tabs"></nav>
-  </aside>
 
-  <main class="workspace">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">Рабочий экран</p>
-        <h2 id="screen-title">Преподаватель</h2>
-      </div>
-      <button id="sync-groups" class="secondary-button" type="button">Обновить группы</button>
-    </header>
+    <script>
+        // Данные для хранения выбранных дисциплин
+        const groupSubjects = {{ group_subjects|tojson }};
+        
+        // Текущая выбранная группа
+        let currentGroupId = '';
 
-    <section id="teacher" class="screen active">
-      <div class="section-title">
-        <h3>Отчеты преподавателя</h3>
-        <p>Загрузка отчета переводит его на проверку ЛПР и блокирует повторную отправку.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Группа</th>
-              <th>Дисциплина</th>
-              <th>Статус</th>
-              <th>Файл</th>
-              <th>Действие</th>
-            </tr>
-          </thead>
-          <tbody id="teacher-reports"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="lpr" class="screen">
-      <div class="section-title">
-        <h3>Проверка ЛПР</h3>
-        <p>Рассмотрение отчетов, отправленных преподавателем.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Группа</th>
-              <th>Дисциплина</th>
-              <th>Файл</th>
-              <th>Комментарий</th>
-              <th>Решение</th>
-            </tr>
-          </thead>
-          <tbody id="lpr-reports"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="head" class="screen">
-      <div class="section-title">
-        <h3>Заведующий кафедрой</h3>
-        <p>Группы, участие, выбор дисциплин, график проверок и ответственность экспертов.</p>
-      </div>
-
-      <div class="grid two">
-        <div class="panel">
-          <div class="panel-heading">
-            <h4>Формирование списка групп</h4>
-            <a class="secondary-link" href="api/schedule/export">Выгрузить график</a>
-          </div>
-          <div class="table-wrap compact">
-            <table>
-              <thead>
-                <tr>
-                  <th>Группа</th>
-                  <th>Курс</th>
-                  <th>Участие</th>
-                  <th>Дисциплины</th>
-                  <th>План</th>
-                </tr>
-              </thead>
-              <tbody id="groups"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h4>График проверки</h4>
-          <div class="table-wrap compact">
-            <table>
-              <thead>
-                <tr>
-                  <th>Группа</th>
-                  <th>Дисциплина</th>
-                  <th>Дата</th>
-                  <th>Время</th>
-                  <th>Статус</th>
-                </tr>
-              </thead>
-              <tbody id="schedule"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h4>Зона ответственности экспертов</h4>
-        <div class="table-wrap compact">
-          <table>
-            <thead>
-              <tr>
-                <th>ФИО</th>
-                <th>Должность</th>
-                <th>Показатель</th>
-                <th>Доступ</th>
-              </tr>
-            </thead>
-            <tbody id="experts"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div id="toast" class="toast" role="status"></div>
-
-  <script>
-    const state = {
-      tabs: [],
-      groups: [],
-      disciplines: [],
-      reports: [],
-      tests: [],
-      experts: [],
-    };
-
-    const toast = document.getElementById('toast');
-
-    function notify(message) {
-      toast.textContent = message;
-      toast.classList.add('show');
-      window.setTimeout(() => toast.classList.remove('show'), 2200);
-    }
-
-    async function api(path, options = {}) {
-      const response = await fetch(path, {
-        headers: { 'Content-Type': 'application/json', 'X-Role': 'leader', ...(options.headers || {}) },
-        ...options,
-      });
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        throw new Error(body.error || 'Ошибка запроса');
-      }
-      return response.json();
-    }
-
-    function switchTab(tabId) {
-      document.querySelectorAll('.screen').forEach(item => item.classList.toggle('active', item.id === tabId));
-      document.querySelectorAll('.tab').forEach(item => item.classList.toggle('active', item.dataset.tab === tabId));
-      const tab = state.tabs.find(item => item.id === tabId);
-      document.getElementById('screen-title').textContent = tab ? tab.label : 'Рабочий экран';
-    }
-
-    function renderTabs() {
-      const tabs = document.getElementById('tabs');
-      tabs.innerHTML = state.tabs.map((tab, index) => `
-        <button class="tab ${index === 0 ? 'active' : ''}" type="button" data-tab="${tab.id}">
-          <span></span>${tab.label}
-        </button>
-      `).join('');
-      tabs.querySelectorAll('.tab').forEach(button => {
-        button.addEventListener('click', () => switchTab(button.dataset.tab));
-      });
-    }
-
-    function statusClass(status) {
-      if (['Сдан', 'yes'].includes(status)) return 'status good';
-      if (['На доработке', 'no'].includes(status)) return 'status warn';
-      if (status === 'Отправлен на проверку ЛПР') return 'status info';
-      return 'status neutral';
-    }
-
-    function renderTeacherReports() {
-      document.getElementById('teacher-reports').innerHTML = state.reports.map(report => `
-        <tr>
-          <td>${report.group}</td>
-          <td>${report.discipline}</td>
-          <td><span class="${statusClass(report.status)}">${report.status}</span></td>
-          <td>${report.originalFilename ? `<a href="${report.downloadUrl}">${report.originalFilename}</a>` : 'Не загружен'}</td>
-          <td>
-            ${report.uploadLocked ? '<span class="muted">Загрузка заблокирована</span>' : `
-              <label class="file-button">
-                Загрузить
-                <input type="file" data-report-id="${report.id}">
-              </label>
-            `}
-          </td>
-        </tr>
-      `).join('');
-
-      document.querySelectorAll('input[type="file"][data-report-id]').forEach(input => {
-        input.addEventListener('change', async () => {
-          if (!input.files.length) return;
-          const formData = new FormData();
-          formData.append('file', input.files[0]);
-          const response = await fetch(`api/reports/${input.dataset.reportId}/upload`, {
-            method: 'POST',
-            body: formData,
-          });
-          if (!response.ok) {
-            notify('Не удалось загрузить отчет');
-            return;
-          }
-          await load();
-          notify('Отчет отправлен на проверку ЛПР');
+        document.addEventListener('DOMContentLoaded', function() {
+            const planRadios = document.querySelectorAll('.plan-square input[type="radio"]');
+            const form = document.getElementById('mainForm');
+            
+            planRadios.forEach(radio => {
+                radio.addEventListener('click', function(e) {
+                    // Получаем ID группы из name атрибута
+                    const name = this.getAttribute('name');
+                    const groupId = name.replace('plan_', '');
+                    currentGroupId = groupId;
+                    
+                    // Обновляем заголовок модального окна
+                    document.getElementById('modalGroupId').textContent = groupId;
+                    
+                    // Восстанавливаем ранее выбранные дисциплины, если они есть
+                    if (groupSubjects[groupId]) {
+                        document.getElementById('subject1').value = groupSubjects[groupId][0] || '';
+                        document.getElementById('subject2').value = groupSubjects[groupId][1] || '';
+                    } else {
+                        // Сбрасываем выбор
+                        document.getElementById('subject1').value = '';
+                        document.getElementById('subject2').value = '';
+                    }
+                    
+                    // Показываем модальное окно
+                    document.getElementById('subjectModal').style.display = 'flex';
+                });
+            });
+            
+            // Обработчики кнопок модального окна
+            document.getElementById('btnConfirm').addEventListener('click', function() {
+                const subject1 = document.getElementById('subject1').value;
+                const subject2 = document.getElementById('subject2').value;
+                
+                // Проверяем, что хотя бы одна дисциплина выбрана
+                if (!subject1 && !subject2) {
+                    alert('Пожалуйста, выберите хотя бы одну дисциплину');
+                    return;
+                }
+                
+                // Сохраняем выбранные дисциплины
+                groupSubjects[currentGroupId] = [subject1, subject2];
+                
+                // Закрываем модальное окно
+                document.getElementById('subjectModal').style.display = 'none';
+                
+                console.log(`Для группы ${currentGroupId} выбраны дисциплины:`, subject1, subject2);
+            });
+            
+            document.getElementById('btnClear').addEventListener('click', function() {
+                // Очищаем выбор
+                document.getElementById('subject1').value = '';
+                document.getElementById('subject2').value = '';
+            });
+            
+            document.getElementById('btnBack').addEventListener('click', function() {
+                // Снимаем выделение с радио-кнопки
+                const radio = document.querySelector(`input[name="plan_${currentGroupId}"]:checked`);
+                if (radio) {
+                    radio.checked = false;
+                }
+                
+                // Закрываем модальное окно
+                document.getElementById('subjectModal').style.display = 'none';
+            });
+            
+            // Закрытие модального окна при клике на оверлей
+            document.getElementById('subjectModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+            
+            // Обработчик отправки формы
+            form.addEventListener('submit', function(e) {
+                // Проверяем, что для каждой запланированной группы выбраны дисциплины
+                const plannedGroups = document.querySelectorAll('.plan-square input[type="radio"]:checked');
+                let allValid = true;
+                const missingSubjects = [];
+                
+                plannedGroups.forEach(radio => {
+                    const name = radio.getAttribute('name');
+                    const groupId = name.replace('plan_', '');
+                    
+                    if (!groupSubjects[groupId] || (!groupSubjects[groupId][0] && !groupSubjects[groupId][1])) {
+                        allValid = false;
+                        missingSubjects.push(groupId);
+                    }
+                });
+                
+                if (!allValid) {
+                    e.preventDefault();
+                    alert(`Для следующих групп не выбраны дисциплины: ${missingSubjects.join(', ')}`);
+                    return false;
+                }
+                
+                // Добавляем скрытые поля с выбранными дисциплинами
+                for (const [groupId, subjects] of Object.entries(groupSubjects)) {
+                    // Удаляем старые поля, если они есть
+                    const oldField1 = document.querySelector(`input[name="subjects_${groupId}_1"]`);
+                    const oldField2 = document.querySelector(`input[name="subjects_${groupId}_2"]`);
+                    if (oldField1) oldField1.remove();
+                    if (oldField2) oldField2.remove();
+                    
+                    const subject1Input = document.createElement('input');
+                    subject1Input.type = 'hidden';
+                    subject1Input.name = `subjects_${groupId}_1`;
+                    subject1Input.value = subjects[0] || '';
+                    
+                    const subject2Input = document.createElement('input');
+                    subject2Input.type = 'hidden';
+                    subject2Input.name = `subjects_${groupId}_2`;
+                    subject2Input.value = subjects[1] || '';
+                    
+                    this.appendChild(subject1Input);
+                    this.appendChild(subject2Input);
+                }
+                
+                return true;
+            });
         });
-      });
-    }
-
-    function renderLprReports() {
-      const lprReports = state.reports.filter(report => report.status === 'Отправлен на проверку ЛПР' || report.originalFilename);
-      document.getElementById('lpr-reports').innerHTML = lprReports.map(report => `
-        <tr>
-          <td>${report.group}</td>
-          <td>${report.discipline}</td>
-          <td>${report.originalFilename ? `<a href="${report.downloadUrl}">${report.originalFilename}</a>` : 'Нет файла'}</td>
-          <td><input class="text-input" data-comment="${report.id}" value="${report.lprComment || ''}" placeholder="Комментарий"></td>
-          <td class="actions">
-            <button class="small good" type="button" data-action="approve" data-report-id="${report.id}">Одобрить</button>
-            <button class="small warn" type="button" data-action="reject" data-report-id="${report.id}">На доработку</button>
-          </td>
-        </tr>
-      `).join('') || '<tr><td colspan="5" class="empty">Нет отчетов на рассмотрении</td></tr>';
-
-      document.querySelectorAll('[data-action][data-report-id]').forEach(button => {
-        button.addEventListener('click', async () => {
-          const comment = document.querySelector(`[data-comment="${button.dataset.reportId}"]`)?.value || '';
-          await api(`api/reports/${button.dataset.reportId}/lpr-decision`, {
-            method: 'POST',
-            body: JSON.stringify({ action: button.dataset.action, comment }),
-          });
-          await load();
-          notify('Решение ЛПР сохранено');
-        });
-      });
-    }
-
-    function renderGroups() {
-      document.getElementById('groups').innerHTML = state.groups.map(group => {
-        const selectedIds = new Set(group.selectedDisciplines.map(item => item.id));
-        return `
-          <tr>
-            <td>${group.groupNumber}</td>
-            <td>${group.course}</td>
-            <td>
-              <select data-participation="${group.id}">
-                <option value="yes" ${group.participationStatus === 'yes' ? 'selected' : ''}>Да</option>
-                <option value="no" ${group.participationStatus === 'no' ? 'selected' : ''}>Нет</option>
-              </select>
-            </td>
-            <td>
-              <div class="checks">
-                ${state.disciplines.map(discipline => `
-                  <label>
-                    <input type="checkbox" data-group-discipline="${group.id}" value="${discipline.id}" ${selectedIds.has(discipline.id) ? 'checked' : ''}>
-                    ${discipline.name}
-                  </label>
-                `).join('')}
-              </div>
-            </td>
-            <td>
-              <select data-plan="${group.id}">
-                <option value="">Не планировать</option>
-                <option value="Осень 2026" ${group.plannedTerm === 'Осень 2026' ? 'selected' : ''}>Осень 2026</option>
-                <option value="Весна 2027" ${group.plannedTerm === 'Весна 2027' ? 'selected' : ''}>Весна 2027</option>
-              </select>
-            </td>
-          </tr>
-        `;
-      }).join('');
-
-      document.querySelectorAll('[data-participation]').forEach(select => {
-        select.addEventListener('change', async () => {
-          await api(`api/groups/${select.dataset.participation}/participation`, {
-            method: 'POST',
-            body: JSON.stringify({ status: select.value }),
-          });
-          await load();
-          notify('Статус участия сохранен');
-        });
-      });
-
-      document.querySelectorAll('[data-plan]').forEach(select => {
-        select.addEventListener('change', async () => {
-          await api(`api/groups/${select.dataset.plan}/plan`, {
-            method: 'POST',
-            body: JSON.stringify({ plannedTerm: select.value, currentTesting: Boolean(select.value) }),
-          });
-          await load();
-          notify('Планирование сохранено');
-        });
-      });
-
-      document.querySelectorAll('[data-group-discipline]').forEach(input => {
-        input.addEventListener('change', async () => {
-          const groupId = input.dataset.groupDiscipline;
-          const disciplineIds = [...document.querySelectorAll(`[data-group-discipline="${groupId}"]:checked`)]
-            .map(item => Number(item.value));
-          await api(`api/groups/${groupId}/disciplines`, {
-            method: 'PUT',
-            body: JSON.stringify({ disciplineIds }),
-          });
-          await load();
-          notify('Выбранные дисциплины сохранены');
-        });
-      });
-    }
-
-    function renderSchedule() {
-      document.getElementById('schedule').innerHTML = state.tests.map(item => `
-        <tr>
-          <td>${item.group}</td>
-          <td>${item.discipline}</td>
-          <td>${item.date}</td>
-          <td>${item.time}</td>
-          <td><span class="status good">${item.agreementStatus}</span></td>
-        </tr>
-      `).join('');
-    }
-
-    function renderExperts() {
-      document.getElementById('experts').innerHTML = state.experts.map(expert => `
-        <tr>
-          <td>${expert.fullName}</td>
-          <td>${expert.position}</td>
-          <td>${expert.indicator}</td>
-          <td>
-            <label class="switch">
-              <input type="checkbox" data-expert="${expert.id}" ${expert.accessOpen ? 'checked' : ''}>
-              <span>${expert.accessOpen ? 'Открыт' : 'Закрыт'}</span>
-            </label>
-          </td>
-        </tr>
-      `).join('');
-
-      document.querySelectorAll('[data-expert]').forEach(input => {
-        input.addEventListener('change', async () => {
-          await api(`api/experts/${input.dataset.expert}/access`, {
-            method: 'POST',
-            body: JSON.stringify({ accessOpen: input.checked }),
-          });
-          await load();
-          notify('Доступ эксперта обновлен');
-        });
-      });
-    }
-
-    function render() {
-      renderTabs();
-      renderTeacherReports();
-      renderLprReports();
-      renderGroups();
-      renderSchedule();
-      renderExperts();
-    }
-
-    async function load() {
-      const data = await api('api/bootstrap');
-      Object.assign(state, data);
-      render();
-    }
-
-    document.getElementById('sync-groups').addEventListener('click', async () => {
-      await api('api/groups/sync', { method: 'POST', body: '{}' });
-      await load();
-      notify('Список групп обновлен');
-    });
-
-    load().catch(error => notify(error.message));
-  </script>
+    </script>
 </body>
 </html>

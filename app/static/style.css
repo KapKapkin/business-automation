@@ -1,0 +1,306 @@
+:root{
+  --bg-top:#e9eeff;
+  --card-bg:#ffffff;
+  --accent:#5a6ef8;
+  --muted:#eef0fb;
+  --text:#0f1724;
+  --soft:#e7e9f6;
+  --red:#ff5a65;
+  --blue:#3b6bff;
+  --border-color:#e5e7eb;
+  --row-odd:#f9fafb;
+  --row-even:#ffffff;
+  --btn-reject: #EC5F6B;
+  --btn-accept: #5F6DEC;
+  --btn-clear: #EE9E44;
+}
+
+/* базовые */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; color:var(--text); background:linear-gradient(180deg,var(--bg-top), #ffffff);}
+
+.stage{display:flex;align-items:center;justify-content:center;padding:18px 0;}
+.viewport{display:flex;align-items:center;justify-content:center;}
+
+.panel{
+  width:1290px;
+  height:820px;
+  background:var(--card-bg);
+  border-radius:18px;
+  box-shadow:0 12px 30px rgba(56,68,115,0.12);
+  padding:28px 36px;
+  overflow:hidden;
+}
+
+.h1{font-size:30px;margin:0 0 24px 0;font-weight:700;color:#0b1220;text-align:center;}
+
+/* Фильтры */
+.top-filters{margin-bottom:24px;}
+.filter-row{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;grid-auto-areas:auto;gap:18px 40px;width:100%;margin-left:100px;}
+.filter-item{display:flex;align-items:center;gap:24px;}
+.filter-labfa{font-weight:600;font-size:14px;color:#4b5563;white-space:nowrap;margin-right:5px;}
+.filter-labdi{font-weight:600;font-size:14px;color:#4b5563;white-space:nowrap;margin-right:5px;}
+.filter-labye{font-weight:600;font-size:14px;color:#4b5563;white-space:nowrap;margin-right:58px;}
+.filter-labse{font-weight:600;font-size:14px;color:#4b5563;white-space:nowrap;margin-right:38px;}
+
+.select{position:relative;width:250px;}
+select{
+  width:100%;
+  padding:8px 10px;
+  background:#f8f9fa;
+  border-radius:6px;
+  border:1px solid var(--border-color);
+  font-size:15px;
+  appearance:none;
+  color:#374151;
+}
+.caret{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#6b7280;font-size:10px;pointer-events:none}
+
+/* Таблица */
+.table-area{margin-top:10px;}
+.groups{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+  border:1px solid var(--border-color);
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.groups thead th{
+  background:#f8f9fa;
+  padding:12px 8px;
+  text-align:center;
+  font-weight:700;
+  color:#374151;
+  border-bottom:1px solid var(--border-color);
+  border-right:1px solid var(--border-color);
+}
+.groups thead th:last-child{border-right:none;}
+
+.sub-header th{
+  background:#f8f9fa;
+  padding:8px;
+  font-weight:500;
+  font-size:12px;
+  color:#6b7280;
+  border-bottom:1px solid var(--border-color);
+}
+.periods{display:flex;justify-content:space-around;gap:0px;}
+
+/* Строки таблицы */
+.groups tbody tr{border-bottom:1px solid var(--border-color);}
+.odd-row{background:var(--row-odd);}
+.even-row{background:var(--row-even);}
+
+.groups tbody td{
+  padding:16px 8px;
+  vertical-align:middle;
+  text-align:center;
+  border-right:1px solid var(--border-color);
+  height:60px;
+}
+.groups tbody td:last-child{border-right:none;}
+
+.group-id{
+  font-weight:600;
+  color:#22303a;
+  text-align:left;
+  padding-left:16px !important;
+}
+
+.course{ color:#374151; font-weight:500; }
+
+/* Квадратные переключатели (prev / current) */
+.controls-row{ display:flex; gap:90px; align-items:center; justify-content:center; }
+
+.square-toggle{ display:inline-block; cursor:pointer; position:relative; }
+
+.square-toggle input{ position:absolute; opacity:0; width:0; height:0; pointer-events:none; }
+
+.sq{
+  display:inline-flex;
+  width:20px;
+  height:20px;
+  border-radius:4px;
+  align-items:center;
+  justify-content:center;
+  background:var(--red);
+  transition:background .12s ease;
+  box-shadow:0 2px 4px rgba(0,0,0,0.08);
+  border:1px solid rgba(0,0,0,0.06);
+}
+
+.sq .icon-check, .sq .icon-cross{ width:14px; height:14px; display:block; }
+.sq .icon-check{ display:none; }
+.sq .icon-cross{ display:block; }
+
+.square-toggle input:checked + .sq{ background:var(--blue); }
+.square-toggle input:checked + .sq .icon-check{ display:block; }
+.square-toggle input:checked + .sq .icon-cross{ display:none; }
+
+/* ПЛАН: квадраты с синей галочкой (radio -> только один) */
+.plan-controls{ display:flex; gap:40px; align-items:center; justify-content:center; }
+
+.plan-square{ display:inline-block; cursor:pointer; position:relative; }
+.plan-square input{ position:absolute; opacity:0; width:0; height:0; pointer-events:none; }
+
+/* визуал для планирования: нейтральный квадрат и синий при выборе */
+.sq-plan{
+  display:inline-flex;
+  width:20px;
+  height:20px;
+  border-radius:4px;
+  align-items:center;
+  justify-content:center;background:#f1f3f9; /* нейтральный фон когда не выбран */
+  border:1px solid #d1d5db;
+  box-shadow:0 2px 4px rgba(0,0,0,0.04);
+  transition:background .12s ease, border-color .12s ease;
+}
+
+/* чек внутри (скрыт по умолчанию) */
+.sq-plan .plan-check{ width:14px; height:14px; display:none; }
+
+/* когда radio выбран - синий квадрат и показываем белую галочку */
+.plan-square input:checked + .sq-plan{
+  background:var(--blue);
+  border-color:var(--blue);
+}
+.plan-square input:checked + .sq-plan .plan-check{
+  display:block;
+}
+
+/* Кнопка */
+.action{ display:flex; justify-content:center; margin-top:24px; }
+
+.btn{
+  background:var(--blue);
+  color:white;
+  border:none;
+  padding:12px 32px;
+  border-radius:8px;
+  font-weight:600;
+  font-size:14px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(59,107,255,0.2);
+  transition:all 0.2s ease;
+}
+.btn:hover{background:#2d5ae0; transform:translateY(-1px); box-shadow:0 6px 16px rgba(59,107,255,0.3);}
+
+/* МОДАЛЬНОЕ ОКНО */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: var(--card-bg);
+    border-radius: 30px;
+    padding: 32px 52px;
+    width: 942px;
+    height: 280px;
+    max-width: 90vw;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+}
+
+.modal-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--text);
+    margin: 0;
+}
+
+.modal-group-id {
+    color: var(--text);
+    font-weight: bold;
+}
+
+.modal-content {
+    margin-bottom: 24px;
+}
+
+.select-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.select-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.select-wrapper label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.modal-select {
+    width: 100%;
+    padding: 10px 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    font-size: 14px;
+    color: #374151;
+    appearance: none;
+}
+
+.modal-caret {
+    position: absolute;
+    right: 12px;
+    top: calc(50% + 6px);
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 10px;
+    pointer-events: none;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 10px;
+    height: 40px;
+    width: 174px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-confirm {
+    background: var(--btn-accept);
+    color: var(--row-even);
+}
+
+.btn-clear {
+    background: var(--btn-clear);
+    color: var(--row-even);
+}
+
+.btn-back {
+    background: var(--btn-reject);
+    color: var(--row-even);
+}
