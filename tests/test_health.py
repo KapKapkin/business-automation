@@ -4,6 +4,17 @@ def test_health(client):
     assert response.get_json() == {"status": "OK"}
 
 
+def test_main_screen_has_only_functional_role_tabs(client):
+    response = client.get("/")
+
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    assert "Преподаватель" in html
+    assert "ЛПР" in html
+    assert "Заведующий кафедрой" in html
+    assert "Сдача отчетов" not in html
+
+
 def test_bootstrap_exposes_python_task_data(client):
     response = client.get("/api/bootstrap")
 
